@@ -27,12 +27,12 @@ spec:
         node-type: worker
       name: wazuh-manager-worker
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
+      # affinity:
+      #   podAntiAffinity:
+      #     preferredDuringSchedulingIgnoredDuringExecution:
+      #       - weight: 100
+      #         podAffinityTerm:
+      #           topologyKey: kubernetes.io/hostname
       volumes:
         - name: config
           configMap:
@@ -42,7 +42,7 @@ spec:
             secretName: odfe-ssl-certs
       containers:
         - name: wazuh-manager
-          image: 'wazuh/wazuh-odfe:4.2.7'
+          image: 'wazuh/wazuh-manager:4.5.4'
           resources:
             limits:
               cpu: 400m

@@ -45,7 +45,7 @@ spec:
           command:
             - sh
             - '-c'
-            - 'chown -R 1000:1000 /usr/share/elasticsearch/data'
+            - 'chown -R 1000:1000 /usr/share/elasticsearch' 
           volumeMounts:
             - name: wazuh-elasticsearch
               mountPath: /usr/share/elasticsearch/data
@@ -59,14 +59,16 @@ spec:
             privileged: true
       containers:
         - name: wazuh-elasticsearch
-          image: 'amazon/opendistro-for-elasticsearch:1.13.2'
+          image: 'elasticsearch:7.17.13'
           resources:
             limits:
               cpu: 500m
-              memory: 1Gi
+              memory: 1564Mi
           env:
+            - name: ELASTIC_PASSWORD
+              value: '12345678@'          
             - name: ES_JAVA_OPTS
-              value: '-Xms1g -Xmx1g'
+              value: '-Xms1g -Xmx1g -Dlog4j2.formatMsgNoLookups=true'
             - name: CLUSTER_NAME
               value: wazuh
             - name: NETWORK_HOST
@@ -90,23 +92,23 @@ spec:
             - name: wazuh-elasticsearch
               mountPath: /usr/share/elasticsearch/data
             - name: odfe-ssl-certs
-              mountPath: /usr/share/elasticsearch/config/node-key.pem
+              mountPath: /usr/share/elasticsearch/config/certs/node-key.pem
               subPath: node-key.pem
               readOnly: true
             - name: odfe-ssl-certs
-              mountPath: /usr/share/elasticsearch/config/node.pem
+              mountPath: /usr/share/elasticsearch/config/certs/node.pem
               subPath: node.pem
               readOnly: true
             - name: odfe-ssl-certs
-              mountPath: /usr/share/elasticsearch/config/root-ca.pem
+              mountPath: /usr/share/elasticsearch/config/certs/root-ca.pem
               subPath: root-ca.pem
               readOnly: true
             - name: odfe-ssl-certs
-              mountPath: /usr/share/elasticsearch/config/admin.pem
+              mountPath: /usr/share/elasticsearch/config/certs/admin.pem
               subPath: admin.pem
               readOnly: true
             - name: odfe-ssl-certs
-              mountPath: /usr/share/elasticsearch/config/admin-key.pem
+              mountPath: /usr/share/elasticsearch/config/certs/admin-key.pem
               subPath: admin-key.pem
               readOnly: true
             - name: elastic-odfe-conf
@@ -114,7 +116,7 @@ spec:
               subPath: elasticsearch.yml
               readOnly: true
             - name: elastic-odfe-conf
-              mountPath: /usr/share/elasticsearch/plugins/opendistro_security/securityconfig/internal_users.yml
+              mountPath: /usr/share/elasticsearch/opensearch-security/internal_users.yml
               subPath: internal_users.yml
               readOnly: true
           ports:

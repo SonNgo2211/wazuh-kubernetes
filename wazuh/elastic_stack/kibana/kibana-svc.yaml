@@ -15,16 +15,17 @@ metadata:
   labels:
     app: wazuh-kibana
     # dns: route53
-  annotations:
+  #annotations:
     # domainName: 'changeme'
     # service.beta.kubernetes.io/aws-load-balancer-ssl-cert: 'changeme'
-    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: '443'
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: https
+    # service.beta.kubernetes.io/aws-load-balancer-ssl-ports: '443'
+    # service.beta.kubernetes.io/aws-load-balancer-backend-protocol: https
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: wazuh-kibana
   ports:
     - name: kibana
       port: 443
+      # port: 80
       targetPort: 5601

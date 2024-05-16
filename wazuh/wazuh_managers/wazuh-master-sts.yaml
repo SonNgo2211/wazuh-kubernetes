@@ -37,9 +37,11 @@ spec:
         - name: wazuh-authd-pass
           secret:
             secretName: wazuh-authd-pass
+      securityContext:
+        fsGroup: 101
       containers:
         - name: wazuh-manager
-          image: 'wazuh/wazuh-odfe:4.2.7'
+          image: 'wazuh/wazuh-manager:4.5.4'
           resources:
             limits:
               cpu: 400m
@@ -122,7 +124,7 @@ spec:
                   name: elastic-cred
                   key: password
             - name: FILEBEAT_SSL_VERIFICATION_MODE
-              value: 'none'
+              value: 'full'
             - name: SSL_CERTIFICATE_AUTHORITIES
               value: /etc/ssl/root-ca.pem
             - name: SSL_CERTIFICATE

@@ -24,25 +24,36 @@ spec:
       name: wazuh-kibana
     spec:
       volumes:
+        - name: config
+          configMap:
+            name: kibana-conf
         - name: kibana-certs
           secret:
             secretName: kibana-certs
       containers:
         - name: wazuh-kibana
-          image: 'wazuh/wazuh-kibana-odfe:4.2.7'
+          image: 'whackers/kibana-k8s:latest'
           resources:
             limits:
               cpu: 500m
               memory: 1Gi
           volumeMounts:
+            - name: config
+              mountPath: /usr/share/kibana/config/kibana.yml
+              subPath: kibana.yml
+              readOnly: false
             - name: kibana-certs
-              mountPath: /usr/share/kibana/config/cert.pem
+              mountPath: /usr/share/kibana/certs/cert.pem
               readOnly: true
               subPath: cert.pem
             - name: kibana-certs
-              mountPath: /usr/share/kibana/config/key.pem
+              mountPath: /usr/share/kibana/certs/key.pem
               readOnly: true
               subPath: key.pem
+            - name: kibana-certs
+              mountPath: /usr/share/kibana/certs/root-ca.pem
+              readOnly: true
+              subPath: root-ca.pem
           ports:
             - containerPort: 5601
               name: kibana
@@ -59,12 +70,22 @@ spec:
                 secretKeyRef:
                   name: elastic-cred
                   key: password
+            - name: KIBANA_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: kibana-cred
+                  key: username
+            - name: KIBANA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: kibana-cred
+                  key: password
             - name: SERVER_SSL_ENABLED
               value: "true"
             - name: SERVER_SSL_CERTIFICATE
-              value: /usr/share/kibana/config/cert.pem
+              value: /usr/share/kibana/certs/cert.pem
             - name: SERVER_SSL_KEY
-              value: /usr/share/kibana/config/key.pem
+              value: /usr/share/kibana/certs/key.pem
             - name: WAZUH_API_URL
               value: https://wazuh-manager-master-0.wazuh-cluster
             - name: API_USERNAME

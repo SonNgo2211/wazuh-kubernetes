@@ -1,28 +1,49 @@
-cluster.name: ${CLUSTER_NAME}
+# cluster.name: ${CLUSTER_NAME}
 node.name: ${NODE_NAME}
 network.host: ${NETWORK_HOST}
-discovery.seed_hosts: wazuh-elasticsearch-0.wazuh-elasticsearch
-cluster.initial_master_nodes:
-  - wazuh-elasticsearch-0
+# discovery.seed_hosts: 
+#     - wazuh-elasticsearch-0.wazuh-elasticsearch
+cluster.initial_master_nodes: 
+    - wazuh-elasticsearch-0.wazuh-elasticsearch
 
-opendistro_security.ssl.transport.enabled: true
-opendistro_security.ssl.transport.pemcert_filepath: node.pem
-opendistro_security.ssl.transport.pemkey_filepath: node-key.pem
-opendistro_security.ssl.transport.pemtrustedcas_filepath: root-ca.pem
-opendistro_security.ssl.transport.enforce_hostname_verification: false
-opendistro_security.ssl.http.enabled: true
-opendistro_security.ssl.http.pemcert_filepath: node.pem
-opendistro_security.ssl.http.pemkey_filepath: node-key.pem
-opendistro_security.ssl.http.pemtrustedcas_filepath: root-ca.pem
-opendistro_security.audit.type: internal_elasticsearch
-opendistro_security.audit.config.index: "'security-auditlog-'YYYY.MM"
-opendistro_security.allow_default_init_securityindex: true
-opendistro_security.authcz.admin_dn:
-  - CN=admin,O=Company,L=California,C=US
-opendistro_security.nodes_dn:
-  - CN=*.elasticsearch,O=Company,L=California,C=US
-opendistro_security.enable_snapshot_restore_privilege: true
-opendistro_security.check_snapshot_restore_write_privileges: true
-opendistro_security.restapi.roles_enabled: ["all_access", "security_rest_api_access", "service_full_access"]
+# opendistro_security.ssl.transport.enabled: true
+# opendistro_security.ssl.transport.pemcert_filepath: node.pem
+# opendistro_security.ssl.transport.pemkey_filepath: node-key.pem
+# opendistro_security.ssl.transport.pemtrustedcas_filepath: root-ca.pem
+# opendistro_security.ssl.transport.enforce_hostname_verification: false
+# opendistro_security.ssl.http.enabled: true
+# opendistro_security.ssl.http.pemcert_filepath: node.pem
+# opendistro_security.ssl.http.pemkey_filepath: node-key.pem
+# opendistro_security.ssl.http.pemtrustedcas_filepath: root-ca.pem
+# opendistro_security.audit.type: internal_elasticsearch
+# opendistro_security.audit.config.index: "'security-auditlog-'YYYY.MM"
+# opendistro_security.allow_default_init_securityindex: true
+# opendistro_security.authcz.admin_dn:
+#   - CN=admin,O=Company,L=California,C=US
+# opendistro_security.nodes_dn:
+#   - CN=*.elasticsearch,O=Company,L=California,C=US
+# opendistro_security.enable_snapshot_restore_privilege: true
+# opendistro_security.check_snapshot_restore_write_privileges: true
+# opendistro_security.restapi.roles_enabled: ["all_access", "security_rest_api_access", "service_full_access"]
 
-cluster.routing.allocation.disk.threshold_enabled: false
+# cluster.routing.allocation.disk.threshold_enabled: false
+
+# Transport layer
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: certificate
+xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/node-key.pem
+xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/node.pem
+xpack.security.transport.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/root-ca.pem
+
+# # HTTP layer
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.verification_mode: certificate
+xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/node-key.pem
+xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/node.pem
+xpack.security.http.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/root-ca.pem
+
+# Elasticsearch authentication
+xpack.security.enabled: true
+
+path.data: /usr/share/elasticsearch/data
+path.logs: /usr/share/elasticsearch/log/elasticsearch

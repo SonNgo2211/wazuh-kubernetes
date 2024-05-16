@@ -27,6 +27,7 @@ secretGenerator:
     files:
       - certs/kibana_http/cert.pem
       - certs/kibana_http/key.pem
+      - certs/odfe_cluster/root-ca.pem
 
 configMapGenerator:
   - name: elastic-odfe-conf
@@ -37,6 +38,9 @@ configMapGenerator:
     files:
       - wazuh_managers/wazuh_conf/master.conf
       - wazuh_managers/wazuh_conf/worker.conf
+  - name: kibana-conf
+    files:
+      - elastic_stack/kibana/kibana_conf/kibana.yml
 
 resources:
   - base/wazuh-ns.yaml
@@ -45,6 +49,7 @@ resources:
   - secrets/wazuh-api-cred-secret.yaml
   - secrets/wazuh-authd-pass-secret.yaml
   - secrets/wazuh-cluster-key-secret.yaml
+  - secrets/kibana-cred-secret.yaml
   - secrets/elastic-cred-secret.yaml
 
   - wazuh_managers/wazuh-cluster-svc.yaml
